@@ -37,9 +37,13 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
+# Create the directory for photos and set permissions.
+RUN mkdir -p /app/telegram_photos && chown -R appuser:appuser /app/telegram_photos
 
 # Copy the source code into the container.
 COPY src/ /app/
+COPY .env /app/.env
+
 
 RUN chmod +x /app/main.py
 
