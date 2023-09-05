@@ -1,15 +1,15 @@
 import os
 from dotenv import load_dotenv
 import datetime
-import uuid
 import json
 import cv2
 from ultralytics import YOLO
 
 
 class ModeloYOLO:
-    def __init__(self, image_path):
+    def __init__(self, image_path, id):
         self.image_path = image_path
+        self.id = id
         load_dotenv()
 
     def predict(self):
@@ -20,7 +20,6 @@ class ModeloYOLO:
             WEIGHTS_PATH = os.getenv("WEIGHTS_PATH")
 
             source = cv2.imread(self.image_path)
-            id = str(uuid.uuid4())
             datetime_cet = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             model = YOLO(WEIGHTS_PATH)
@@ -36,7 +35,7 @@ class ModeloYOLO:
                     name = result.names[cls]
                     confidence = float(result.boxes.conf[i].item())
                     obj = {
-                        "id": id,
+                        "id": self.id,
                         "datetime": datetime_cet,
                         "name": name,
                         "probability": round(confidence, 4),

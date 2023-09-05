@@ -1,5 +1,5 @@
-opencv-python==4.8.0.76
+# opencv-python==4.8.0.76
 pyTelegramBotAPI==4.13.0
 python-dotenv==1.0.0
 requests==2.31.0
-ultralytics==8.0.168
+# ultralytics==8.0.168

@@ -3,6 +3,8 @@ import telebot
 import requests
 from dotenv import load_dotenv
 
+# from ModeloYOLO import ModeloYOLO
+
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
