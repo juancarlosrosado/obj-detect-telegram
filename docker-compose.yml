@@ -1,0 +1,20 @@
+version: '3'
+services:
+  telegram-bot:
+    build: .
+    depends_on:
+      - mysql
+    networks:
+      - my_network
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: my_password
+
+      MYSQL_DATABASE: my_database
+    networks:
+      - my_network
+
+networks:
+  my_network:

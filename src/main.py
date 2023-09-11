@@ -2,8 +2,8 @@ import os
 import telebot
 import requests
 from dotenv import load_dotenv
-
-# from ModeloYOLO import ModeloYOLO
+from ModeloYOLO import ModeloYOLO
+import json
 
 load_dotenv()
 
@@ -29,12 +29,22 @@ def handle_photo(message):
     file_path = file_info.file_path
 
     photo_url = f"https://api.telegram.org/file/bot{TOKEN}/{file_path}"
+    print(photo_url)
     photo_path = os.path.join(FOTOS_DIR, f"{file_id}.jpg")
+    print("photo_path =====>", photo_path)
     response = requests.get(photo_url)
-    bot.reply_to(message, "Foto procesada! En breves te mandaremos la receta.")
-
     with open(photo_path, "wb") as f:
         f.write(response.content)
+
+    ModeloYOLO(photo_path, file_id).predict()
+    json_path = f"predictions/{file_id}/{file_id}.json"
+    with open(json_path) as json_file:
+        # Carga el contenido del archivo JSON en una variable como un diccionario
+        data = json.load(json_file)
+    bot.reply_to(
+        message,
+        f"Foto procesada! Nuestro modelo ha detectado que en la foto hay: {data['name']}",
+    )
 
 
 if __name__ == "__main__":

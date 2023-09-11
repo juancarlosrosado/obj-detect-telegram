@@ -24,7 +24,11 @@ class ModeloYOLO:
 
             model = YOLO(WEIGHTS_PATH)
             results = model.predict(
-                source=source, save=True, project="predictions", name=id, exist_ok=True
+                source=source,
+                save=True,
+                project="predictions",
+                name=self.id,
+                exist_ok=True,
             )
 
             for result in results:
@@ -41,7 +45,9 @@ class ModeloYOLO:
                         "probability": round(confidence, 4),
                     }
 
-                    with open(f'predictions/{id}/{obj["id"]}.json', "a") as json_file:
+                    with open(
+                        f'predictions/{self.id}/{obj["id"]}.json', "a"
+                    ) as json_file:
                         json.dump(obj, json_file, indent=4)
 
             return print("Done")
