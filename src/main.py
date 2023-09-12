@@ -38,13 +38,17 @@ def handle_photo(message):
 
     ModeloYOLO(photo_path, file_id).predict()
     json_path = f"predictions/{file_id}/{file_id}.json"
-    with open(json_path) as json_file:
-        # Carga el contenido del archivo JSON en una variable como un diccionario
-        data = json.load(json_file)
-    bot.reply_to(
-        message,
-        f"Foto procesada! Nuestro modelo ha detectado que en la foto hay: {data['name']}",
-    )
+
+    if not os.path.exists(json_path):
+        bot.reply_to(message, "No se ha podido procesar la foto. Por favor, inténtalo de nuevo.")
+    else:
+        with open(json_path) as json_file:
+            # Carga el contenido del archivo JSON en una variable como un diccionario
+            data = json.load(json_file)
+        bot.reply_to(
+            message,
+            f"Foto procesada! Nuestro modelo ha detectado que en la foto hay: {data['name']}",
+        )
 
 
 if __name__ == "__main__":
