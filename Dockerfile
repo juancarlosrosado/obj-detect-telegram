@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
 
 # Creamos el directorio para las fotos y establecemos los permisos
 RUN mkdir -p /app/telegram_photos && chown -R appuser:appuser /app/telegram_photos
-RUN mkdir /app/predictions && chown -R appuser:appuser /app/predictions
+RUN mkdir -p /app/predictions && chown -R appuser:appuser /app/predictions
 
 # Copiamos el código fuente dentro del contenedor
 COPY src/ /app/
@@ -45,6 +45,10 @@ COPY runs/ /app/runs/
 
 # Concedemos permisos de ejecución al archivo main.py
 RUN chmod +x /app/main.py
+# RUN chmod -R 777 /app/telegram_photos
+# RUN chown -R 10001:10001 /app/telegram_photos
+# RUN chmod -R 777 /app/predictions
+# RUN chown -R 10001:10001 /app/predictions
 
 # Cambiamos al usuario no privilegiado para ejecutar la aplicación
 USER appuser

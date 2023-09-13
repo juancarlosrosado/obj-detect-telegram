@@ -34,6 +34,8 @@ class ModeloYOLO:
             for result in results:
                 detection_count = result.boxes.shape[0]
 
+                my_dict = []
+
                 for i in range(detection_count):
                     cls = int(result.boxes.cls[i].item())
                     name = result.names[cls]
@@ -44,11 +46,10 @@ class ModeloYOLO:
                         "name": name,
                         "probability": round(confidence, 4),
                     }
+                    my_dict.append(obj)
 
-                    with open(
-                        f'predictions/{self.id}/{obj["id"]}.json', "a"
-                    ) as json_file:
-                        json.dump(obj, json_file, indent=4)
+                with open(f'predictions/{self.id}/{obj["id"]}.json', "a") as json_file:
+                    json.dump(my_dict, json_file, indent=4)
 
             return print("Done")
 
