@@ -8,6 +8,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_DB_NAME: chatbot
     volumes:
       - mongodb-data:/data/db  # Para persistir los datos de MongoDB
 
@@ -22,7 +23,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      MONGO_URI: mongodb://root:admin@mongodb:27017/chatbot  # Ajusta la URI de conexión a MongoDB
+      MONGO_URI: mongodb://root:admin@mongodb:27017/chatbot?authSource=admin  # Ajusta la URI de conexión a MongoDB
     volumes:
       - ./telegram_photos:/app/telegram_photos  # Monta el directorio de fotos para tu aplicación
     links:

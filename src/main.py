@@ -16,6 +16,7 @@ MONGO_URI = os.getenv("MONGO_URI")
 if not os.path.exists(FOTOS_DIR):
     os.makedirs(FOTOS_DIR)
 
+
 bot = telebot.TeleBot(TOKEN)
 
 client = MongoClient(MONGO_URI)
@@ -27,6 +28,8 @@ collection = db["datos"]
 def handle_start(message):
     bot.reply_to(message, "¡Hola! Envíame una foto y la procesaré.")
     print(f"==============> Current user: {os.geteuid()}")
+
+    print("MONGO_URI =====>", MONGO_URI)
 
 
 @bot.message_handler(content_types=["photo"])
@@ -46,7 +49,7 @@ def handle_photo(message):
 
     data_to_insert = {
         "file_id": file_id,
-        "photo_path": photo_path,
+        "photo_path": photo_url,
     }
 
     collection.insert_one(data_to_insert)

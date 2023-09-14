@@ -54,4 +54,5 @@ RUN chmod +x /app/main.py
 USER appuser
 
 # Ejecutamos la aplicación
+
 ENTRYPOINT ["python", "/app/main.py"]
