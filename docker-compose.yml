@@ -1,9 +1,7 @@
 version: '3'
 services:
   fastapi:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: ./obj-detect-yolo
     ports:
       - "8000:80"
     networks:
@@ -25,9 +23,7 @@ services:
     volumes:
       - mongodb:/data/db  # Para persistir los datos de MongoDB
   chatbot-telegram-:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: chatbot-telegram
     user: "0:0"
     ports:

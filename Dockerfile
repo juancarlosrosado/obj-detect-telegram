@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
 
 # Creamos el directorio para las fotos y establecemos los permisos
 RUN mkdir -p /app/telegram_photos && chown -R appuser:appuser /app/telegram_photos
-RUN mkdir -p /app/predictions && chown -R appuser:appuser /app/predictions
+# RUN mkdir -p /app/predictions && chown -R appuser:appuser /app/predictions
 
 # Copiamos el código fuente dentro del contenedor
 COPY src/ /app/
