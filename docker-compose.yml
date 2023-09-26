@@ -1,18 +1,30 @@
 version: '3'
 services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    networks:
+      - deploy-network
+    container_name: fastapi
+    volumes:
+      - /home/juanki/obj-detect-yolo:/app
   mongodb:
     image: mongo
     container_name: mongodb
     ports:
       - "27017:27017"
+    networks:
+      - deploy-network
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: admin
       MONGO_DB_NAME: chatbot
     volumes:
-      - mongodb-data:/data/db  # Para persistir los datos de MongoDB
-
-  app:
+      - mongodb:/data/db  # Para persistir los datos de MongoDB
+  chatbot-telegram-:
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,13 +33,18 @@ services:
     ports:
       - "3000:3000"
     depends_on:
+      - fastapi
       - mongodb
+    networks:
+      - deploy-network
     environment:
       MONGO_URI: mongodb://root:admin@mongodb:27017/chatbot?authSource=admin  # Ajusta la URI de conexión a MongoDB
-    volumes:
-      - ./telegram_photos:/app/telegram_photos  # Monta el directorio de fotos para tu aplicación
+    # volumes:
+      # - ./telegram_photos:/app/telegram_photos  # Monta el directorio de fotos para tu aplicación
     links:
       - mongodb
-
+networks:
+  deploy-network:
+    driver: bridge
 volumes:
-  mongodb-data:  # Define un volumen para persistir los datos de MongoDB
+  mongodb:

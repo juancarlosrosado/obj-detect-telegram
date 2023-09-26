@@ -2,15 +2,15 @@ import os
 import telebot
 import requests
 from dotenv import load_dotenv
-from ModeloYOLO import ModeloYOLO
 import json
 from pymongo import MongoClient
 
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
-FOTOS_DIR = "telegram_photos"
+FOTOS_DIR = os.getenv("FOTOS_DIR")
 MONGO_URI = os.getenv("MONGO_URI")
+API_YOLO = os.getenv("API_YOLO")
 
 
 if not os.path.exists(FOTOS_DIR):
@@ -36,25 +36,31 @@ def handle_start(message):
 def handle_photo(message):
     file_id = message.photo[-1].file_id
     print(f"Recibida foto con file_id: {file_id}")
+
     file_info = bot.get_file(file_id)
     file_path = file_info.file_path
 
     photo_url = f"https://api.telegram.org/file/bot{TOKEN}/{file_path}"
     print(photo_url)
+
     photo_path = os.path.join(FOTOS_DIR, f"{file_id}.jpg")
     print("photo_path =====>", photo_path)
+
     response = requests.get(photo_url)
     with open(photo_path, "wb") as f:
         f.write(response.content)
 
-    data_to_insert = {
-        "file_id": file_id,
-        "photo_path": photo_url,
-    }
+    modeloYOLO = requests.post(API_YOLO, files={"file": open(photo_path, "rb")})
 
-    collection.insert_one(data_to_insert)
+    print("modeloYOLO =====>", modeloYOLO)
 
-    ModeloYOLO(photo_path, file_id).predict()
+    # data_to_insert = {
+    #     "_id": file_id,
+    #     "photo_to_predict": bson.Binary(response.content),
+    # }
+
+    # collection.insert_one(data_to_insert)
+
     json_path = f"predictions/{file_id}/{file_id}.json"
 
     if not os.path.exists(json_path):
@@ -64,6 +70,11 @@ def handle_photo(message):
     else:
         with open(json_path) as json_file:
             data = json.load(json_file)
+
+        # collection.update_one(
+        #     {"_id": file_id},
+        #     {"$set": {"data": data}}
+        # )
 
         ingredientes = []
         for ingredient in data:
