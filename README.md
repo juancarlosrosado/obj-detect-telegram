@@ -8,7 +8,7 @@ Para utilizar este ChatBot de Telegram, necesitarás:
 
 - Una cuenta de Telegram.
 
-- Acceder a este link: `https://t.me/IMF_TFM_BOT`
+- Acceder a este link: https://t.me/IMF_TFM_BOT
 
 ## Instrucciones de Uso
 
