@@ -41,7 +41,7 @@ RUN mkdir -p /app/telegram_photos && chown -R appuser:appuser /app/telegram_phot
 # Copiamos el código fuente dentro del contenedor
 COPY src/ /app/
 COPY .env /app/.env
-COPY runs/ /app/runs/
+# COPY runs/ /app/runs/
 
 # Concedemos permisos de ejecución al archivo main.py
 RUN chmod +x /app/main.py
