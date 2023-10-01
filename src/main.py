@@ -2,8 +2,9 @@ import os
 import telebot
 import requests
 from dotenv import load_dotenv
-import json
 from pymongo import MongoClient
+
+from ImagePIL import bytes_2_image, string_to_bytes
 
 load_dotenv()
 
@@ -50,9 +51,27 @@ def handle_photo(message):
     with open(photo_path, "wb") as f:
         f.write(response.content)
 
-    modeloYOLO = requests.post(API_YOLO, files={"file": open(photo_path, "rb")})
+    modeloYOLO = requests.post(
+        API_YOLO, files={"file": open(photo_path, "rb")}, params={"file_id": file_id}
+    )
 
-    print("modeloYOLO =====>", modeloYOLO)
+    print("modeloYOLO =====>", modeloYOLO.status_code)
+
+    data = modeloYOLO.json()
+
+    if modeloYOLO.status_code != 200:
+        bot.reply_to(
+            message, "No se ha podido procesar la foto. Por favor, inténtalo de nuevo."
+        )
+    else:
+        bot.reply_to(
+            message,
+            f'Foto procesada! Nuestro modelo ha detectado que en la foto hay: {data[0]["ingredient"]}',
+        )
+        chat_id = message.chat.id
+        bytes_img = string_to_bytes(data[0]["image_bytes"])
+        img = bytes_2_image(bytes_img)
+        bot.send_photo(chat_id, img)
 
     # data_to_insert = {
     #     "_id": file_id,
@@ -61,32 +80,32 @@ def handle_photo(message):
 
     # collection.insert_one(data_to_insert)
 
-    json_path = f"predictions/{file_id}/{file_id}.json"
+    # json_path = f"predictions/{file_id}/{file_id}.json"
 
-    if not os.path.exists(json_path):
-        bot.reply_to(
-            message, "No se ha podido procesar la foto. Por favor, inténtalo de nuevo."
-        )
-    else:
-        with open(json_path) as json_file:
-            data = json.load(json_file)
+    # if not os.path.exists(json_path):
+    #     bot.reply_to(
+    #         message, "No se ha podido procesar la foto. Por favor, inténtalo de nuevo."
+    #     )
+    # else:
+    #     with open(json_path) as json_file:
+    #         data = json.load(json_file)
 
-        # collection.update_one(
-        #     {"_id": file_id},
-        #     {"$set": {"data": data}}
-        # )
+    #     # collection.update_one(
+    #     #     {"_id": file_id},
+    #     #     {"$set": {"data": data}}
+    #     # )
 
-        ingredientes = []
-        for ingredient in data:
-            ingredientes.append(ingredient["name"])
-        bot.reply_to(
-            message,
-            f'Foto procesada! Nuestro modelo ha detectado que en la foto hay: {", ".join(ingredientes)}',
-        )
+    #     ingredientes = []
+    #     for ingredient in data:
+    #         ingredientes.append(ingredient["name"])
+    #     bot.reply_to(
+    #         message,
+    #         f'Foto procesada! Nuestro modelo ha detectado que en la foto hay: {", ".join(ingredientes)}',
+    #     )
 
-        chat_id = message.chat.id
-        img = open(f"predictions/{file_id}/image0.jpg", "rb")
-        bot.send_photo(chat_id, img)
+    #     chat_id = message.chat.id
+    #     img = open(f"predictions/{file_id}/image0.jpg", "rb")
+    #     bot.send_photo(chat_id, img)
 
 
 if __name__ == "__main__":
