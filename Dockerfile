@@ -43,6 +43,7 @@ RUN mkdir -p /app/telegram_photos && chown -R admin:admin /app/telegram_photos
 # Copiamos el código fuente dentro del contenedor
 COPY src/ /app/src/
 COPY .env /app/.env
+COPY recipes.json /app/recipes.json
 # COPY runs/ /app/runs/
 
 # Concedemos permisos de ejecución al archivo main.py
