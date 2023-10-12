@@ -3,13 +3,13 @@ services:
 
   fastapi:
     container_name: fastapi
-    build: /home/juanki/obj-detect-yolo
+    build: /home/obj_detect_imf/obj-detect-yolo
     ports:
       - "8000:80"
     networks:
       - deploy-network
     volumes:
-      - /home/juanki/obj-detect-yolo:/app
+      - /home/obj_detect_imf/obj-detect-yolo:/app
 
   mongodb:
     image: mongo
