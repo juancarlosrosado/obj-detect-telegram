@@ -1,4 +1,4 @@
 TELEGRAM_TOKEN = "fuubar999999999"
 MONGO_URI = "mongodb://fuu:bar@mongodb:9999/fuubar"
 FOTOS_DIR = "fuubar"
-API_YOLO = "http://fuu:80/bar/"
+API_YOLO = "http://fuu:99/bar/"
