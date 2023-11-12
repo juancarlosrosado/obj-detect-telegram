@@ -24,7 +24,7 @@ Para utilizar este ChatBot de Telegram, necesitarás:
 
 Este ChatBot de Telegram utiliza una variedad de tecnologías para ofrecer sus funciones, incluyendo:
 
-- **Detección de objetos en imágenes**: se utiliza un modelo de detección de objetos entrenado basado en YOLOv8 para identificar los ingredientes presentes en las imágenes. El codigo se encuentra en el siguiente repositorio [enlace al repositorio de YOLO](https://github.com/juankiross/obj-detect-yolo).
+- **Detección de objetos en imágenes**: se utiliza un modelo de detección de objetos entrenado basado en YOLOv8 para identificar los ingredientes presentes en las imágenes. El codigo se encuentra en el siguiente repositorio [enlace al repositorio de YOLO](https://github.com/juancarlosrosado/obj-detect-yolo).
 
 - **Búsqueda de recetas**: se integra con una base de datos de recetas en MongoDB para buscar recetas que incluyan los ingredientes detectados.
 
